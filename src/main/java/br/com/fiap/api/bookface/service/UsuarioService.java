@@ -19,8 +19,8 @@ public class UsuarioService {
 		return usuarioRepository.save(usuario);
 	}
 	
-	public Optional<Usuario> buscar(Long id) {
-		return usuarioRepository.findById(id);
+	public Usuario buscar(Long id) {
+		return usuarioRepository.findById(id).orElseThrow();
 	}
 	
 	public List<Usuario> listar(){

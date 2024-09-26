@@ -19,8 +19,8 @@ public class PostService {
 		return postRepository.save(post);
 	}
 	
-	public Optional<Post> buscar(Long id){
-		return postRepository.findById(id);
+	public Post buscar(Long id){
+		return postRepository.findById(id).orElseThrow();
 	}
 	
 	public List<Post> listar(){
