@@ -3,6 +3,8 @@ package br.com.fiap.api.bookface.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,31 +26,32 @@ public class ComentarioController implements Controller<Comentario>{
 	
 	
 	@GetMapping
-	public List listar(){
-		return comentarioService.listar();
+	public ResponseEntity<List<Comentario>> listar(){
+		return ResponseEntity.ok(comentarioService.listar());
 	}
 	
 	@GetMapping("/{id}")
-	public Comentario buscar(@PathVariable Long id) {
-		return comentarioService.buscar(id);
+	public ResponseEntity<Comentario> findById(@PathVariable Long id) {
+		Comentario comentario = comentarioService.buscar(id);
+		return ResponseEntity.ok(comentario);
 	}
 	
 	@PostMapping
-	public Comentario salvar(Comentario comentario) {
-		return comentarioService.salvar(comentario);
+	public ResponseEntity<Comentario> create(Comentario comentario) {
+		comentario = comentarioService.salvar(comentario);
+		return ResponseEntity.status(HttpStatus.CREATED).body(comentario);
 	}
 	
 	@PutMapping("/{id}")
-	public Comentario atualizar(@PathVariable Long id, @RequestBody Comentario comentario) {
-		Comentario comentarioAtual;
-		comentarioAtual = this.buscar(id);
-		
-		return comentarioService.salvar(comentario);
+	public ResponseEntity<Comentario> update(@PathVariable Long id, @RequestBody Comentario comentario) {
+		Comentario comentarioAtual = comentarioService.update(id, comentario);
+		return ResponseEntity.ok(comentarioAtual);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deletar (@PathVariable Long id) {
+	public ResponseEntity<Void> delete (@PathVariable Long id) {
 		comentarioService.excluir(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

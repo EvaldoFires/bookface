@@ -2,11 +2,13 @@ package br.com.fiap.api.bookface.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 public interface Controller<T> {
-	public List<T> listar();
-	public T buscar(Long id);
-	public T salvar(T obj);
-	public T atualizar(Long id, T obj);
-	public void deletar(Long id);
+	public ResponseEntity<List<T>> listar();
+	public ResponseEntity<T> findById(Long id);
+	public ResponseEntity<T> create(T obj);
+	public ResponseEntity<T> update(Long id, T obj);
+	public ResponseEntity<Void> delete(Long id);
 }
 

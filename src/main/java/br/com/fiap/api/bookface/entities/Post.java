@@ -3,13 +3,14 @@ package br.com.fiap.api.bookface.entities;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.data.annotation.Id;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,10 +28,13 @@ public class Post {
 	private String tags;
 	
 	@ManyToOne
-	@Column(nullable = false)
-	private Usuario usuario 
-	;
+	@JoinColumn(name = "usuario_post_id", nullable = false)
+	private Usuario usuario;
+	
 	private List<String> listaCurtidas;
+	
+	@OneToMany
+	@JoinColumn()
 	private List<Comentario> comentarios;
 	
 	public Post(Usuario usuario, String titulo, String conteudo, String tags) {
@@ -42,6 +46,10 @@ public class Post {
 	}
 	public void comentar (Comentario comentario) {
 		comentarios.add(comentario);
+	}
+	
+	public List<Comentario> getComentarios() {
+		return comentarios;
 	}
 	
 	public void curtir(String nomeUsuario ) {

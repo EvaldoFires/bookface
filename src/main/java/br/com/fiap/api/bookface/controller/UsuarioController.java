@@ -3,16 +3,22 @@ package br.com.fiap.api.bookface.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.api.bookface.entities.Usuario;
 import br.com.fiap.api.bookface.service.UsuarioService;
 
+@RestController
+@RequestMapping("/usuario")
 public class UsuarioController implements Controller<Usuario>{
 	
 	@Autowired
@@ -20,33 +26,36 @@ public class UsuarioController implements Controller<Usuario>{
 
 	@GetMapping
 	@Override
-	public List<Usuario> listar() {
-		return usuarioService.listar();
+	public ResponseEntity<List<Usuario>> listar() {
+		return ResponseEntity.ok(usuarioService.listar());
 	}
 
 	@GetMapping("/{id}")
 	@Override
-	public Usuario buscar(@PathVariable Long id) {
-		return usuarioService.buscar(id);
+	public ResponseEntity<Usuario> findById(@PathVariable Long id) {
+		Usuario usuario = usuarioService.buscar(id);
+		return ResponseEntity.ok(usuario);
 	}
 
 	@PostMapping
 	@Override
-	public Usuario salvar(@RequestBody Usuario usuario) {
-		return usuarioService.salvar(usuario);
+	public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
+		usuario = usuarioService.salvar(usuario);
+		return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
 	}
 
 	@PutMapping("/{id}")
 	@Override
-	public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-		Usuario usuarioAtual = this.buscar(id);
-		return usuarioService.salvar(usuarioAtual);
+	public ResponseEntity<Usuario> update(@PathVariable Long id, @RequestBody Usuario usuario) {
+		Usuario usuarioAtual = usuarioService.update(id, usuario);
+		return ResponseEntity.ok(usuarioAtual);
 	}
 
 	@DeleteMapping("/{id}")
 	@Override
-	public void deletar(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		usuarioService.excluir(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	

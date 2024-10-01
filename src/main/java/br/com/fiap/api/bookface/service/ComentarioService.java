@@ -1,12 +1,12 @@
 package br.com.fiap.api.bookface.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.api.bookface.entities.Comentario;
+import br.com.fiap.api.bookface.exceptions.ControllerNotFoundException;
 import br.com.fiap.api.bookface.repository.ComentarioRepository;
 
 @Service
@@ -21,7 +21,7 @@ public class ComentarioService {
 	
 	public Comentario buscar(Long id){
 		return comentarioRepository.findById(id)
-				.orElseThrow();
+				.orElseThrow(()-> new ControllerNotFoundException("Comentario não encontrado"));
 	}
 	
 	public List<Comentario> listar(){
@@ -30,5 +30,12 @@ public class ComentarioService {
 	
 	public void excluir(Long id) {
 		comentarioRepository.deleteById(id);
+	}
+	
+	public Comentario update(Long id, Comentario comentario) {
+		Comentario comentarioAtual = this.buscar(id);
+		comentarioAtual.setTexto(comentario.getTexto());
+		comentarioAtual = comentarioRepository.save(comentarioAtual);
+		return comentarioAtual;
 	}
 }

@@ -1,13 +1,14 @@
 package br.com.fiap.api.bookface.entities;
 
+import java.util.List;
 import java.util.Objects;
-
-import org.springframework.data.annotation.Id;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,12 +30,36 @@ public class Usuario {
 	@Column(nullable = false)
 	private String senha;
 	
+	@OneToMany
+	private List<Comentario> comentarios;
+	
+	@OneToMany
+	private List<Post> posts;
+	
+	public Usuario() {
+	}
+	
 	public Usuario (String nome, String email, String senha) {
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
 	}
 
+	public void adcionaComentario(Comentario comentario) {
+		comentarios.add(comentario);
+	}
+
+	public List<Comentario> getComentario() {
+		return comentarios;
+	}
+
+	public void adcionaPost(Post post) {
+		posts.add(post);
+	}
+	
+	public List<Post> getPosts() {
+		return posts;
+	}
 	
 	public String getNome() {
 		return nome;
